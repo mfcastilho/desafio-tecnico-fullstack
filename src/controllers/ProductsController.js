@@ -53,23 +53,27 @@ const ProductsController = {
                     // return res.json({ message: "É um pacote." });
 
                     const packProductsInfos = await Pack.findAll({
-                         where:{pack_id: product.code}
+                         where:{pack_id: product.code},
+                         include:[{
+                              model: Product,
+                              as: "product"
+                         }]
                     });
 
 
-                    const packProducts = [];
-                    async function getPackProducts(){
-                         for(let product of packProductsInfos){
-                              const packProduct = await Product.findOne({
-                                   where:{code: product.product_id}
-                              });
+                    // const packProducts = [];
+                    // async function getPackProducts(){
+                    //      for(let product of packProductsInfos){
+                    //           const packProduct = await Product.findOne({
+                    //                where:{code: product.product_id}
+                    //           });
                               
-                              packProducts.push(packProduct);
-                         }
-                    }
-                   
-                    await getPackProducts();
-                    return res.json(packProducts);
+                    //           packProducts.push(packProduct);
+                    //      }
+                    // }                 
+                    // await getPackProducts();
+
+                    return res.json({pack:product, pack_products:packProductsInfos});
 
                     // return res.json({pack_products_infos: packProductsInfos});
 
