@@ -6,34 +6,48 @@ const ProductsController = {
 
           try {
 
-               const { product_code } = req.body;
+               const { product_code, new_price } = req.body;
 
+               const formValidation = validationResult(req);
 
-               const packs = await Pack.findAll({
-                    include:[
-                         { model: Product, as: 'product' },
-                         { model: Product, as: 'packProducts' },
-                    ]
-               });
+               if (formValidation.errors.length > 0) {
+                    return res.json({ errors: formValidation.mapped(), old: req.body });
+               }
 
-               const products = await Product.findAll({
-                    include:[{
+               const product = await Product.findByPk(product_code, {
+                    include: {
                          model: Pack,
-                         as: 'pack',
-                    }]
+                         as: "pack"
+                    }
                });
 
-               return res.json({ data: products});
+               if(!product) {
+                    return res.status(404).send({message: "O código do produto não existe." });
+               }
 
-               // const formValidation = validationResult(req);
 
-               // if (formValidation.errors.length > 0) {
-               //      return res.json({ errors: formValidation.mapped(), old: req.body });
-               // }
+
+
+               // const packs = await Pack.findAll({
+               //      include:[
+               //           { model: Product, as: 'product' },
+               //           { model: Product, as: 'packProducts' },
+               //      ]
+               // });
+
+               // const products = await Product.findAll({
+               //      include:[{
+               //           model: Pack,
+               //           as: 'pack',
+               //      }]
+               // });
+
+               // return res.json({ data: products});
 
                
+               
 
-               // res.json({ product_code });
+               return res.json({ data: product });
 
           } catch (error) {
 
