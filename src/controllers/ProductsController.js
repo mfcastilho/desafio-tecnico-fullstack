@@ -47,6 +47,38 @@ const ProductsController = {
                }
 
 
+               //Verificando se é um pacote
+               if(product.pack.length === 0){
+
+                    // return res.json({ message: "É um pacote." });
+
+                    const packProductsInfos = await Pack.findAll({
+                         where:{pack_id: product.code}
+                    });
+
+
+                    const packProducts = [];
+                    async function getPackProducts(){
+                         for(let product of packProductsInfos){
+                              const packProduct = await Product.findOne({
+                                   where:{code: product.product_id}
+                              });
+                              
+                              packProducts.push(packProduct);
+                         }
+                    }
+                   
+                    await getPackProducts();
+                    return res.json(packProducts);
+
+                    // return res.json({pack_products_infos: packProductsInfos});
+
+               }
+
+
+               
+
+
                // const packs = await Pack.findAll({
                //      include:[
                //           { model: Product, as: 'product' },
