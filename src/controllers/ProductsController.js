@@ -49,7 +49,10 @@ const ProductsController = {
 
 
                //Verificando se é um pacote
-               if(product.pack.length === 0){
+                const verifyIfTheProductIsAPack = await Pack.findOne({
+                    where: {pack_id: product.code}
+               });
+               if(verifyIfTheProductIsAPack){
 
                     // return res.json({ message: "É um pacote." });
 
@@ -64,7 +67,7 @@ const ProductsController = {
 
                     /*Verificando quantos porcentos cada produto representa no pacote e 
                       Verificando a representação do preço do conjunto de produtos no pacote*/
-                    const productPorcentRepresentationInThePackArray = [];
+                    const productPorcentAndValueRepresentationInThePackArray = [];
                     for(let p of packProductsInfos){
                          const productSalesPrice = Number(p.product.sales_price);
                          const productPorcentRepresentationInThePack = ((productSalesPrice * p.qty) / Number(product.sales_price)) * 100;
@@ -84,13 +87,13 @@ const ProductsController = {
                               product_set_price_representation_in_pack: Number(productSetPriceRepresentaioninPack.toFixed(2))
                          }
 
-                         productPorcentRepresentationInThePackArray.push(packProductInfos);    
+                         productPorcentAndValueRepresentationInThePackArray.push(packProductInfos);    
                     }
 
 
                
                     //Atualizando os preços dos produtos inseridos dentro do pacote
-                    for (let packProduct of productPorcentRepresentationInThePackArray) {
+                    for (let packProduct of productPorcentAndValueRepresentationInThePackArray) {
                          const newProductPrice = packProduct.product_set_price_representation_in_pack / packProduct.quantity_of_product_in_the_pack;
                          const productCode = packProduct.product_code;
                     
@@ -110,7 +113,7 @@ const ProductsController = {
                     await Product.update({sales_price: newPrice}, {where: {code: product_code}});
                     
 
-                    return res.json(productPorcentRepresentationInThePackArray);
+                    return res.json(productPorcentAndValueRepresentationInThePackArray);
 
 
 
@@ -128,14 +131,7 @@ const ProductsController = {
                     // await getPackProducts();
 
                     // return res.json({pack:product, pack_products:packProductsInfos});
-
-                   
-
                }
-
-
-               
-
 
                // const packs = await Pack.findAll({
                //      include:[
@@ -153,6 +149,79 @@ const ProductsController = {
 
                // return res.json({ data: products});
 
+
+               //verificando se o produto faz parte de algum pacote
+               if(product.pack.length > 0){
+
+                    //inserindo em um array, os pacotes em que o produto faz parte
+                    let productPacksArray = [];
+                    for(let index in product.pack){
+                         
+                         const productPack = await Product.findOne({
+                              where: {code: product.pack[index].pack_id}
+                         });
+
+                         productPacksArray.push(productPack);
+                    }
+
+
+                    const productPackInfosArray = [];
+                    for(let pack of productPacksArray){
+                         const packProductsInfos = await Pack.findAll({
+                              where:{pack_id: pack.code},
+                              include:[{
+                                   model: Product,
+                                   as: "product"
+                              }]
+                         });
+
+                         const packInfos = {
+                              pack_code: pack.code,
+                              name: pack.name,
+                              cost_price: pack.cost_price,
+                              sales_price: pack.sales_price,
+                              products: packProductsInfos
+                         }
+                         productPackInfosArray.push(packInfos);
+                    }
+
+
+                    //atualizando os valores do produto e do pacote
+                    async function updateProductAndPackValues(){
+
+                         let otherProductSetPriceRepresentationInPack = 0;
+                         let newPackValue = 0;
+                         for(let pack of productPackInfosArray){
+                              
+                              for(let p of pack.products){
+
+                                   const newProductSetPriceRepresentationInPack = new_price * p.qty;
+                                   
+
+                                   if(p.product.name != product.name){
+                                        const productSalesPrice = Number(p.product.sales_price);
+                                        otherProductSetPriceRepresentationInPack = productSalesPrice * p.qty;
+                                        newPackValue += otherProductSetPriceRepresentationInPack + newProductSetPriceRepresentationInPack
+                                        console.log(otherProductSetPriceRepresentationInPack);
+                                        
+                                        
+                                   }
+                                   await Product.update({sales_price: new_price}, {where:{code: product_code}});
+                                    
+
+                                   console.log(newPackValue);
+                                   await Product.update({sales_price: newPackValue}, {where:{code: pack.pack_code}});
+                              }
+                              
+                         }
+                              
+                    }
+
+                    await updateProductAndPackValues();
+
+                    return res.json({packs: productPackInfosArray});
+
+               }
                
                
 
