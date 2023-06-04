@@ -1,5 +1,4 @@
 # Desafio Técnico - Shopper.com.br
-
 Olá, candidato(a)!
 
 Primeiro, gostaríamos de agradecer por seu interesse em fazer parte do time de desenvolvimento da Shopper.com.br. Abaixo vamos descrever um teste técnico onde queremos avaliar o que você conhece sobre desenvolvimento de software.
