@@ -8,6 +8,7 @@ const ProductsController = {
 
           try {
                
+               const { product_code, new_price } = req.body;
 
                //validando campos dos formulários
                const formValidation = validationResult(req);
@@ -298,8 +299,9 @@ const ProductsController = {
                     );
                }
 
+
                //atualizando o valor do pacote
-               await Product.update({sales_price: newPrice}, {where: {code: product_code}});
+               await Product.update({sales_price: Number(new_price)}, {where: {code: product_code}});
                
 
                return res.json(productPorcentAndValueRepresentationInThePackArray);
