@@ -7,7 +7,6 @@ const ProductsController = {
      productsValidation: async (req, res) => {
 
           try {
-
                const { product_code, new_price } = req.body;
 
                //validando campos dos formulários
@@ -52,6 +51,8 @@ const ProductsController = {
                 const verifyIfTheProductIsAPack = await Pack.findOne({
                     where: {pack_id: product.code}
                });
+
+               //se a variável 'verifyIfTheProductIsAPack' não for null é um pacote
                if(verifyIfTheProductIsAPack){
 
                     // return res.json({ message: "É um pacote." });
@@ -114,42 +115,10 @@ const ProductsController = {
                     
 
                     return res.json(productPorcentAndValueRepresentationInThePackArray);
-
-
-
-
-                    // const packProducts = [];
-                    // async function getPackProducts(){
-                    //      for(let product of packProductsInfos){
-                    //           const packProduct = await Product.findOne({
-                    //                where:{code: product.product_id}
-                    //           });
-                              
-                    //           packProducts.push(packProduct);
-                    //      }
-                    // }                 
-                    // await getPackProducts();
-
-                    // return res.json({pack:product, pack_products:packProductsInfos});
                }
 
-               // const packs = await Pack.findAll({
-               //      include:[
-               //           { model: Product, as: 'product' },
-               //           { model: Product, as: 'packProducts' },
-               //      ]
-               // });
 
-               // const products = await Product.findAll({
-               //      include:[{
-               //           model: Pack,
-               //           as: 'pack',
-               //      }]
-               // });
-
-               // return res.json({ data: products});
-
-
+               
                //verificando se o produto faz parte de algum pacote
                if(product.pack.length > 0){
 
