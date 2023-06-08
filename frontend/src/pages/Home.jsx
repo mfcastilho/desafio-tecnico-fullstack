@@ -1,9 +1,11 @@
 import Papa from "papaparse"
 import { useState } from "react";
+import "./Home.css";
 
 function Home() {
 
-     const [setData] = useState([]);
+     // eslint-disable-next-line no-unused-vars
+     const [data, setData] = useState([]);
      const [columnArray, setColumn] = useState([]);
      const [values, setValues] = useState([]);
 
@@ -17,11 +19,12 @@ function Home() {
 
                result.data.map((d)=>{
                     columnArray.push(Object.keys(d));
-                    valuesArray.push(Object.keys(d));
+                    valuesArray.push(Object.values(d));
                });
                setData(result.data);
                setColumn(columnArray[0]);
                setValues(valuesArray);
+               console.log(values)
           }
      })
   }
@@ -55,6 +58,8 @@ function Home() {
                ))}
           </tbody>
         </table>
+        
+        
       </main>
   );
 }
