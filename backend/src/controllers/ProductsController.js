@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const { Pack, Product } = require("../models");
 const verificarReajuste = require("../utils/verificarReajuste");
+const productPorcentAndValueRepresentationInThePackFunction = require("../utils/productPorcentAndValueRepresentationInThePackFunction");
 
 const ProductsController = {
 
@@ -78,14 +79,12 @@ const ProductsController = {
      },
 
      productsUpdate: async (req, res) => {
-          try {
 
+          try {
                
                const { product_code, new_price } = req.body;
 
-
-          
-               //buscando produto através do código enviado do frontend
+               //-- Buscando o produto através do código do produto(product_code) enviado do frontend --
                const product = await Product.findByPk(product_code, {
                     include: {
                          model: Pack,
@@ -94,20 +93,16 @@ const ProductsController = {
                });
 
                if(!product) {
-                    return res.status(404).json({error: "producto não encontrado."});
+                    return res.status(404).json({error: "Produto não encontrado."});
                }
 
-
-
-               //Verificando se é um pacote
+               //-- Verificando se é um pacote --
                const verifyIfTheProductIsAPack = await Pack.findOne({
                     where: {pack_id: product.code}
                });
 
-               //se a variável 'verifyIfTheProductIsAPack' não for null é um pacote
+               //-- se a variável 'verifyIfTheProductIsAPack' não for null/undefined é um pacote --
                if(verifyIfTheProductIsAPack){
-
-                    // return res.json({ message: "É um pacote." });
 
                     const packProductsInfos = await Pack.findAll({
                          where:{pack_id: product.code},
@@ -118,40 +113,16 @@ const ProductsController = {
                     });
 
 
-                    /*Verificando quantos porcentos cada produto representa no pacote e 
-                    Verificando a representação do preço do conjunto de produtos no pacote*/
-                    const productPorcentAndValueRepresentationInThePackArray = [];
-                    for(let p of packProductsInfos){
-                         const productSalesPrice = Number(p.product.sales_price);
-                         const productPorcentRepresentationInThePack = ((productSalesPrice * p.qty) / Number(product.sales_price)) * 100;
-                         
-
-                         const productSetPriceRepresentaioninPack = (productPorcentRepresentationInThePack / 100) * Number(new_price);
-                         
-                         const packProductInfos = {
-                              pack_name: product.name,
-                              pack_code: product.code,
-                              product_code: p.product.code,
-                              product_name: p.product.name,
-                              quantity_of_product_in_the_pack: p.qty,
-                              product_cost_price: Number(p.product.cost_price),
-                              product_sales_price: Number(p.product.sales_price),
-                              product_porcent_representation_in_pack: Number(productPorcentRepresentationInThePack.toFixed(2)),
-                              product_set_price_representation_in_pack: Number(productSetPriceRepresentaioninPack.toFixed(2))
-                         }
-
-                         productPorcentAndValueRepresentationInThePackArray.push(packProductInfos);    
-                    }
-
-
-               
-                    //Atualizando os preços dos produtos inseridos dentro do pacote
+                    /*-- Verificando quantos porcentos cada produto representa no pacote e 
+                    Verificando a representação do preço do conjunto de produtos no pacote --*/
+                    const productPorcentAndValueRepresentationInThePackArray = productPorcentAndValueRepresentationInThePackFunction(product, packProductsInfos, new_price);
+              
+                    //-- Percorrendo o array para atualizar os preços dos produtos inseridos dentro do pacote --
                     for (let packProduct of productPorcentAndValueRepresentationInThePackArray) {
                          const newProductPrice = packProduct.product_set_price_representation_in_pack / packProduct.quantity_of_product_in_the_pack;
                          const productCode = packProduct.product_code;
                     
-                         console.log(newProductPrice, productCode);
-                    
+                         //-- Atualizando os preços dos produtos inseridos no pacote --
                          await Product.update(
                               {
                                    sales_price: newProductPrice
@@ -162,16 +133,14 @@ const ProductsController = {
                          );
                     }
 
-
-                    //atualizando o valor do pacote
+                    //-- Atualizando o valor do pacote --
                     await Product.update({sales_price: Number(new_price)}, {where: {code: product_code}});
      
                     return res.status(200).json({ message: "Produto atualizado com sucesso"});
                }
 
-
-               
-               //verificando se o produto faz parte de algum pacote
+               /*-- Verificando se o produto faz parte de algum pacote 
+                    Se 'product.pack.length > 0' o produto faz parte de um ou mais pacotes--*/
                if(product.pack.length > 0){
 
                     //inserindo em um array, os pacotes em que o produto faz parte
@@ -216,24 +185,22 @@ const ProductsController = {
                               
                               for(let p of pack.products){
 
-                                   const newProductSetPriceRepresentationInPack = new_price * p.qty;
+                                   const productNewSetPriceRepresentationInPack = new_price * p.qty;
                                    
 
                                    if(p.product.name != product.name){
                                         const productSalesPrice = Number(p.product.sales_price);
                                         otherProductSetPriceRepresentationInPack = productSalesPrice * p.qty;
-                                        newPackValue += otherProductSetPriceRepresentationInPack + newProductSetPriceRepresentationInPack
-                                        console.log(otherProductSetPriceRepresentationInPack);
-                                        
-                                        
+                                        newPackValue += otherProductSetPriceRepresentationInPack + productNewSetPriceRepresentationInPack;                                       
                                    }
-                                   await Product.update({sales_price: new_price}, {where:{code: product_code}});
-                                   
 
-                                   console.log(newPackValue);
-                                   await Product.update({sales_price: newPackValue}, {where:{code: pack.pack_code}});
+                                   //Atualizando o preço do produto 
+                                   await Product.update({sales_price: new_price}, {where:{code: product_code}});
+                                    
                               }
-                              
+
+                              //Atualizando o preço do pacote
+                              await Product.update({sales_price: newPackValue}, {where:{code: pack.pack_code}});                              
                          }
                               
                     }
