@@ -58,8 +58,7 @@ function Home() {
                ))}
           </tbody>
         </table>
-        
-        
+         
       </main>
   );
 }
