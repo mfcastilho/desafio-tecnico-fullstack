@@ -10,7 +10,7 @@ const ProductsController = {
           try {
                
                const { product_code, new_price } = req.body;
-
+               console.log("Entrou"+ product_code, new_price);
                //validando campos dos formulários
                const formValidation = validationResult(req);
                if (formValidation.errors.length > 0) {
@@ -49,7 +49,7 @@ const ProductsController = {
                }
 
                const productValidated = {
-                    código: product.code,
+                    codigo: product.code,
                     nome: product.name,
                     precoAtual: Number(product.sales_price),
                     novoPreco: Number(new_price)
