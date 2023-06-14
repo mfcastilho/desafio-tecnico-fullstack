@@ -17,7 +17,7 @@ function Home() {
      const [values, setValues] = useState([]);
      const [productCode, setProductCode] = useState("");
      const [newPrice, setNewPrice] = useState("");
-
+     
 
      // eslint-disable-next-line no-unused-vars
      const [product, setProduct] = useState("");
@@ -54,10 +54,18 @@ function Home() {
      }
    }
 
-  async function handleSubmit(event){
+//    function productInfosValidation(){
+//      if(productCode == ""){
+//           throw new Error({error: "O código do produto está vazio."})
+//      }
+//    }
+
+  async function handleSubmit(){
+     // productInfosValidation();
+
     console.log("entrou")
      try {
-          event.preventDefault();
+          
           const data = {
                product_code: Number(productCode),
                new_price: Number(newPrice)
@@ -72,7 +80,21 @@ function Home() {
           setProduct(resp.data.data);
 
      } catch (error) {
-          console.log(error);
+          if(error.response && error.response.data){
+               const responseData = error.response.data;
+               if(responseData.errors && responseData.errors.product_code && responseData.errors.product_code.msg){
+                    console.log(error.response.data.errors.product_code.msg);
+               }else if(responseData.errors && responseData.errors.new_price && responseData.errors.new_price.msg){
+                    console.log(error.response.data.errors.new_price.msg);
+               }else if(error.response.data && error.response.data.errors){
+                    console.log(error.response.data.errors);
+               }
+          }else{
+               console.log(error);
+          }
+          
+
+          // console.log(error.response.data.errors);
      }
   }
 

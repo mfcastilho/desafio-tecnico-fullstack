@@ -10,11 +10,13 @@ const ProductsController = {
           try {
                
                const { product_code, new_price } = req.body;
-               console.log("Entrou"+ product_code, new_price);
+               console.log("Entrou no método");
+               
                //validando campos dos formulários
                const formValidation = validationResult(req);
+               console.log(formValidation.errors.length)
                if (formValidation.errors.length > 0) {
-                    return res.json({ errors: formValidation.mapped(), old: req.body });
+                    return res.status(404).json({ errors: formValidation.mapped(), old: req.body });
                }
 
 
@@ -28,14 +30,14 @@ const ProductsController = {
 
                //verificando se o código do produto existe no banco de dados
                if(!product) {
-                    return res.status(404).send({ message: "O código do produto não existe." });
+                    return res.status(404).send({ errors: "O código do produto não existe." });
                }
 
 
                //verificando se o preço de venda é menor que o preço de custo
                const costPrice = Number(product.cost_price);
                if( new_price < costPrice){
-                    return res.status(400).send({ message: "O novo preço do produto não pode ser menor que o preço de custo." });
+                    return res.status(404).send({ errors: "O novo preço do produto não pode ser menor que o preço de custo." });
                }
 
 
@@ -45,7 +47,7 @@ const ProductsController = {
                //Verificando se o reajuste é maior ou menor do que 10% do preço atual do produto.
                const resultado = verificarReajuste(salesPrice, newPrice);
                if(!resultado){
-                    return res.status(400).send({ message: "o reajuste NÃO pode ser maior ou menor do que 10% do preço atual do produto." });
+                    return res.status(400).send({ errors: "o reajuste NÃO pode ser maior ou menor do que 10% do preço atual do produto." });
                }
 
                const productValidated = {
@@ -69,7 +71,7 @@ const ProductsController = {
                     });
                }
                if (error.name === "SequelizeUniqueConstraintError") {
-                    return res.status(400).json(error.parent.sqlMessage);
+                    return res.status(400).json({error: true, message: error.parent.sqlMessage});
                     }
 
                if (error.name === "SequelizeValidationError"){
