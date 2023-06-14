@@ -1,12 +1,12 @@
 import './App.css'
-import Home from "./pages/Home"
+import RoutesApp from './RoutesApp';
 
 function App() {
 
 
   return (
      <div>
-          <Home />
+          <RoutesApp/>
      </div>    
   )
 }

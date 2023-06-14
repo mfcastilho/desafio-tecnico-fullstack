@@ -1,5 +1,5 @@
 
-.home{
+.update-product-infos-page{
      width: 100%;
      max-width: 1280px;
      
@@ -8,7 +8,7 @@
      align-items: center;
 }
 
-.home h1{
+.update-product-infos-page h1{
      margin:0 0 3rem 0;
 }
 
@@ -54,4 +54,14 @@
 .danger{
      color: red;
      font-size: 1.2rem;
+}
+
+table{
+     padding: 1rem;
+     border-collapse: collapse;
+}
+
+th, td {
+     padding: 8px;
+     
 }
