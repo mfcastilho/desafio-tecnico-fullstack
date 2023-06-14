@@ -59,9 +59,10 @@
 table{
      padding: 1rem;
      border-collapse: collapse;
+     font-size: 1.4rem;
 }
 
 th, td {
      padding: 8px;
-     
+     text-align: center;
 }
