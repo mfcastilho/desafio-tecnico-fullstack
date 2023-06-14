@@ -1,7 +1,8 @@
 import {useLocation} from "react-router-dom";
-import "./UpdateProductInfosPage.css"
+import "./UpdateProductInfosPage.css";
+import axios from "axios";
 
-
+const baseURL = "http://localhost:3000/api/v1/shopper/update";
 
 function UpdateProductInfosPage(){
 
@@ -9,15 +10,21 @@ function UpdateProductInfosPage(){
      const product = location.state.product;
      console.log(location.state);
 
-     function handleSubmit(){
-          console.log("Entrou")
+     async function handleSubmit(){
+          const data = {
+               product_code: Number(product.codigo),
+               new_price: Number(product.novoPreco)
+          }
+          const resp = await axios.post(baseURL, data);
+
+          console.log(resp.data.message);
      }
 
      return(
           <div className="update-product-infos-page">
                <div className="wrapper-elements">
                <h1>Home do Teste Técnico da Shooper</h1>
-               <button onClick={handleSubmit()}>Atualizar</button>
+               <button onClick={handleSubmit}>Atualizar</button>
           </div>
 
           <br /> 
