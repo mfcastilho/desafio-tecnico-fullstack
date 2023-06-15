@@ -1,4 +1,4 @@
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import "./UpdateProductInfosPage.css";
 import axios from "axios";
 
@@ -8,22 +8,41 @@ function UpdateProductInfosPage(){
 
      const location = useLocation();
      const product = location.state.product;
+     const navigate = useNavigate();
      console.log(location.state);
 
      async function handleSubmit(){
-          const data = {
-               product_code: Number(product.codigo),
-               new_price: Number(product.novoPreco)
-          }
-          const resp = await axios.post(baseURL, data);
+          try {
+               const data = {
+                    product_code: Number(product.codigo),
+                    new_price: Number(product.novoPreco)
+               }
+               const resp = await axios.post(baseURL, data);
+               
+               console.log(resp.data.message);
 
-          console.log(resp.data.message);
+               // eslint-disable-next-line no-undef
+               Swal.fire({
+                    title: resp.data.message,
+                    showConfirmButton: false
+               });
+               setTimeout(()=>{
+                    // eslint-disable-next-line no-undef
+                    Swal.close()
+               }, 2000);
+               setTimeout(()=>{
+                    navigate("/");
+               },2500)
+               
+          } catch (error) {
+               console.log(error);
+          }
      }
 
      return(
           <div className="update-product-infos-page">
                <div className="wrapper-elements">
-               <h1>Home do Teste Técnico da Shooper</h1>
+               <h1>Shopper</h1>
                <button onClick={handleSubmit}>Atualizar</button>
           </div>
 

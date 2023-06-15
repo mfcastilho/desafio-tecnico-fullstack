@@ -100,7 +100,7 @@ function Home() {
 
      <main className="home">
           <div className="wrapper-elements">
-               <h1>Home do Teste Técnico da Shooper</h1>
+               <h1>Shopper</h1>
                <input type="file" accept='.csv' name="file" onChange={handleFile} />
                <button onClick={handleSubmit}>Validar</button>
           </div>
