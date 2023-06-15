@@ -29,39 +29,47 @@ function UpdateProductInfosPage(){
                setTimeout(()=>{
                     // eslint-disable-next-line no-undef
                     Swal.close()
-               }, 2000);
+               }, 3000);
                setTimeout(()=>{
                     navigate("/");
-               },2500)
+               },3200)
                
           } catch (error) {
                console.log(error);
           }
      }
 
+     // function backButton(){
+     //      navigate("/")
+     // }
+
      return(
           <div className="update-product-infos-page">
+               {/* <div className="wrapper-back-button">
+                    <button onClick={backButton}>Voltar</button>
+               </div> */}
                <div className="wrapper-elements">
-               <h1>Shopper</h1>
-               <button onClick={handleSubmit}>Atualizar</button>
-          </div>
+                    <h1>Shopper</h1>
+                    <button onClick={handleSubmit}>Atualizar</button>
+               </div>
 
-          <br /> 
+               <br /> 
 
-          <table border={1}>
-               <thead>
-                    <th>Código do Produto</th>
-                    <th>Nome do Produto</th>
-                    <th>Preço Atual</th>
-                    <th>Novo Preço</th>
-               </thead>
-               <tbody>
-                    <td>{product.codigo}</td>
-                    <td>{product.nome}</td>
-                    <td>{product.precoAtual}</td>
-                    <td>{product.novoPreco}</td>
-               </tbody>
-          </table>
+               <table border={1}>
+                    <thead>
+                         <th>Código do Produto</th>
+                         <th>Nome do Produto</th>
+                         <th>Preço Atual</th>
+                         <th>Novo Preço</th>
+                    </thead>
+                    <tbody>
+                         <td>{product.codigo}</td>
+                         <td>{product.nome}</td>
+                         <td>{product.precoAtual}</td>
+                         <td>{product.novoPreco}</td>
+                    </tbody>
+               </table>
+               
           </div>
      );
 }
