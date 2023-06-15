@@ -99,6 +99,7 @@ function Home() {
   return (
 
      <main className="home">
+ 
           <div className="wrapper-elements">
                <h1>Shopper</h1>
                <input type="file" accept='.csv' name="file" onChange={handleFile} />

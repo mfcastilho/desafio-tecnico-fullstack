@@ -7,6 +7,7 @@ const ProductsController = {
 
      productsValidation: async (req, res) => {
 
+          
           try {
                
                const { product_code, new_price } = req.body;
