@@ -1,64 +1,71 @@
-# Desafio Técnico - Shopper.com.br
-Olá, candidato(a)!
+# Full Stack Project - README
 
-Primeiro, gostaríamos de agradecer por seu interesse em fazer parte do time de desenvolvimento da Shopper.com.br. Abaixo vamos descrever um teste técnico onde queremos avaliar o que você conhece sobre desenvolvimento de software.
+This is a full stack project that utilizes React, Node.js, MySQL, MySQL Workbench, Postman, JavaScript, Sequelize, and PapaParse. The project involves the development of a web application that allows importing data through a CSV file on the frontend. The backend handles routes, models, and validations to ensure data integrity and security.
 
-## Cenário
+## Technologies Used
 
-Em qualquer empresa de e-commerce, é essencial que os usuários possam atualizar os preços de suas lojas para se manterem competitivos e alinhados com os custos de operação. Essa tarefa pode se tornar complexa quando lidamos com lojas que possuem milhares de produtos. Portanto, é necessário ter uma ferramenta que permita atualizar os produtos de forma massiva e com recursos adicionais para evitar erros que possam prejudicar o negócio.
+- React
+- Node.js
+- MySQL
+- MySQL Workbench
+- Postman
+- JavaScript
+- Sequelize
+- PapaParse
 
-Você foi encarregado(a) de desenvolver essa ferramenta e, após uma série de reuniões com as áreas envolvidas, os seguintes requisitos foram levantados:
+## Getting Started
 
-1. O time de Compras, responsável por definir os preços, se comprometeu em gerar um arquivo CSV contendo o código do produto e o novo preço que será carregado.
-2. O time Financeiro, preocupado com o faturamento, solicitou que o sistema impeça que o preço de venda dos produtos fique abaixo do custo deles.
-3. O time de Marketing, preocupado com o impacto de reajustes nos clientes, solicitou que o sistema impeça qualquer reajuste maior ou menor do que 10% do preço atual do produto.
-4. Alguns produtos são vendidos em pacotes, ou seja, um produto que é composto por um ou mais produtos em quantidades diferentes.
+To get started with the project, follow the steps below:
 
-Estabeleceu-se a regra de que, ao reajustar o preço de um pacote, o mesmo arquivo deve conter os reajustes dos preços dos componentes do pacote de modo que o preço final da soma dos componentes seja igual ao preço do pacote.
+1. Clone the repository: `git clone <repository_url>`
+2. Navigate to the project directory: `cd <project_directory>`
+3. Install the necessary dependencies:
+   - For the backend:
+     - Install Sequelize: `npm install sequelize`
+   - For the frontend:
+     - Install PapaParse: `npm install papaparse`
+4. Set up the MySQL database using MySQL Workbench.
+5. Update the database configuration in the backend to match your MySQL database.
+6. Start the server using the command: `npm run dev`
 
-Exemplo 1:
-Imagine o produto "PACK GUARANA 1L – 6 Unidades". Ele é composto por 6 unidades do produto "GUARANA 1L". O preço do pack é de R$ 24,00 e o preço do componente é de R$ 4,00. Se o arquivo de precificação pedir um reajuste do preço do pacote para R$ 30,00, o mesmo arquivo deve conter o reajuste do preço do componente, mudando o preço para R$ 5,00 (6 x 5 = 30).
+## Backend
 
-## Teste Técnico
+The backend of this project is built using Node.js and utilizes Sequelize as the ORM (Object-Relational Mapping) tool to interact with the MySQL database. It handles routes, models, and validations to ensure the smooth flow of data and maintain data integrity.
 
-Exemplo 2:
-Imaginando o produto "KIT ESCOVA DE DENTE + PASTA DE DENTE", vendido a R$ 25,00. O produto é composto por 1 unidade da "ESCOVA DE DENTES" (R$ 10,00) e 1 unidade da "PASTA DE DENTE" (R$ 15,00). Se o preço da "ESCOVA DE DENTES" for reajustado para R$ 20,00, o arquivo também deve conter um reajuste do preço do pacote para R$ 35,00 (R$ 20,00 + R$ 15,00).
+### Routes
 
-A ferramenta deve impedir atualizações de preço que quebrem essa regra.
+The backend consists of various routes that handle different operations. These routes define the endpoints for data retrieval, creation, update, and deletion. Each route is responsible for processing incoming requests, performing the necessary actions on the data, and sending appropriate responses.
 
-## Requisitos
+### Models
 
-Diante desse cenário, você deve construir um sistema com os seguintes requisitos:
+Models in the backend represent the structure of the data stored in the MySQL database. Sequelize simplifies the creation and management of models by providing a robust set of functionalities. Models define the tables and relationships in the database, allowing you to interact with the data using JavaScript objects.
 
-- O sistema deve ter um backend (Node.js), contendo todas as regras definidas, e um frontend (React.js) que será utilizado pelo usuário da ferramenta.
-- Você deve escrever seu código em JavaScript ou TypeScript (preferencialmente).
-- O banco de dados deve ser MySQL (versão 5 ou 8).
-- O sistema deve permitir que o usuário carregue o arquivo de precificação.
-- O sistema deve ter um botão chamado VALIDAR.
-- Ao clicar em VALIDAR, o sistema deve ler todo o arquivo e fazer as seguintes verificações:
-  - Todos os campos necessários existem?
-  - Os códigos de produtos informados existem?
-  - Os preços estão preenchidos e são valores numéricos válidos?
-  - O arquivo respeita as regras levantadas na seção Cenário?
-- Ao final da validação, o sistema deve exibir as seguintes informações dos produtos que foram enviados:
-  - Código, Nome, Preço Atual, Novo Preço
-- Caso uma ou mais regras de validação tenham sido quebradas, o sistema também deve exibir ao lado de cada produto qual regra foi quebrada.
-- O sistema também deve ter um botão ATUALIZAR, que só ficará habilitado se todos os produtos do arquivo estiverem validados e sem regras quebradas.
-- Ao clicar em ATUALIZAR, o sistema deve salvar o novo preço no banco de dados e já deixar a tela pronta para o envio de um novo arquivo.
-- O preço de custo dos pacotes também deve ser atualizado como a soma dos custos dos seus componentes. O preço de custo dos produtos que não são pacotes não deve ser atualizado.
+### Validations
 
-## Como Entregar seu Projeto
+Data validation is a critical aspect of this project to ensure the accuracy and security of the data. The backend implements validations to check the integrity of the incoming data. By enforcing validation rules, we can prevent invalid or malicious data from being stored in the database. Validations are implemented at the model level to ensure that data meets the specified criteria before being processed or stored.
 
-- Junto com esse teste, você deve ter recebido o arquivo `database.sql`. Esse arquivo contém o script que define e preenche a tabela de Produtos, que contém todos os dados de produtos e a tabela que relaciona os pacotes.
-- Seu projeto deve estar versionado no GitHub em um repositório público. Você deve encaminhar o link do seu projeto para o e-mail talentos@shopper.com.br para oficializar sua entrega. Serão aceitas entregas até as 23h59 do dia 15/05/2023.
-- Seu projeto deve ter um arquivo `README.md` contendo todas as instruções para instalação e execução local (passos do setup, variáveis de ambiente, etc.).
-- Não há necessidade de publicar seu projeto em plataformas de host (ex. Heroku).
+## Frontend
 
-## Armadilhas que Você Deve Evitar
+The frontend of this project is developed using React, providing a user-friendly interface for importing data through a CSV file. The data from the CSV file is then processed and sent to the backend for further validation and storage in the MySQL database.
 
-- Atenha-se ao que foi pedido nos requisitos. Não crie complicações não solicitadas (ex. uma tela de login).
-- Caso queira implementar mais funcionalidades para mostrar seus conhecimentos, deixe-as para o final e só as inicie assim que todos os requisitos solicitados tenham sido 100% atendidos. Os requisitos serão contados na avaliação, as funcionalidades extras serão consideradas apenas diferenciais.
+The frontend uses PapaParse, a JavaScript library, to handle CSV parsing. PapaParse offers efficient parsing capabilities and enables the user to preview and manipulate the imported data before submitting it to the backend.
 
-Te desejamos um ótimo trabalho e, caso tenha qualquer dúvida, fique à vontade para entrar em 
-contato conosco.
+## Conclusion
 
+This full stack project demonstrates the integration of multiple technologies to create a powerful web application. By combining React for the frontend, Node.js for the backend, MySQL for database management, and Sequelize for data handling, we achieve a robust and scalable solution. The backend handles routes, models, and validations to ensure data integrity, while the frontend allows easy importing of CSV data.
+
+## Deploy
+
+The project is online and can be used using the sample CSV file on the project.
+
+https://vercel.com/eduvinagre/fullstack-sql-javascript
+
+The backend is uploaded to Cyclic using Postgres
+
+## Techs Used
+
+NodeJs, MySQL, Postman, JavaScript, React, Sequelize, VSCode
+
+## Project Status
+
+Finalized
