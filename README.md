@@ -66,6 +66,8 @@ The project is online and can be used using the sample CSV file on the project.
 
 The backend is uploaded to Cyclic using Postgres
 
+link: https://64cb2386a16e2d2deee4c4d5--gorgeous-starship-dc0502.netlify.app/
+
 ## Techs Used
 
 NodeJs, MySQL, Postman, JavaScript, React, Sequelize, VSCode
