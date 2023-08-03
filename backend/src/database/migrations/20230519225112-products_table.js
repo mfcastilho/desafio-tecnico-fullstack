@@ -4,7 +4,8 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("products", {
-      code: {
+      
+     code: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
