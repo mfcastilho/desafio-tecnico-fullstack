@@ -4,7 +4,6 @@ The system must be built with a backend in Node.js, a frontend in React.js and u
 
 The user will be able to upload a CSV file with the product code and the new price, and the tool must validate the information, ensuring that the price is not below cost, does not exceed the 10% readjustment limit and that the price of the package be updated according to the components.
 
-
 At the end, the system will display the validated product information and allow the price to be updated in the database.
 
 This is a full stack project that utilizes React, Node.js, MySQL, MySQL Workbench, Postman, JavaScript, Sequelize, and PapaParse. The project involves the development of a web application that allows importing data through a CSV file on the frontend. The backend handles routes, models, and validations to ensure data integrity and security.
