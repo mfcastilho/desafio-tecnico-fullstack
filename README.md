@@ -1,6 +1,6 @@
 # Full Stack Project - README
 
-The system must be built with a backend in Node.js, a frontend in React.js and use a MySQL database.
+The system must be built with a backend in Node.js, a frontend in React.js and use a Postgres database.
 
 The user will be able to upload a CSV file with the product code and the new price, and the tool must validate the information, ensuring that the price is not below cost, does not exceed the 10% readjustment limit and that the price of the package be updated according to the components.
 
