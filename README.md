@@ -12,8 +12,7 @@ This is a full stack project that utilizes React, Node.js, MySQL, MySQL Workbenc
 
 - React
 - Node.js
-- MySQL
-- MySQL Workbench
+- ElephantSQL
 - Postman
 - JavaScript
 - Sequelize
