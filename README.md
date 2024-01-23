@@ -1,4 +1,3 @@
-
 # Full Stack Project - README
 
 The system must be built with a backend in Node.js, a frontend in React.js and use a Postgres database.
